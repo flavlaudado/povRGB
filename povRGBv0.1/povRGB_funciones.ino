@@ -276,8 +276,10 @@ void loop_povRGB() {
     else if (letraActual == ' ') {
       //PORTD = 0;
       apagarLEDs(3); //off for 3 times
-    } else if ( 96 > ascii < 123) {//letras minusculas 97 - 122
+    }
 
+    //parte para los dibujos
+    else if ( 96 > ascii < 123) {//letras minusculas 97 - 122
       if (letraActual == 'a') {
         sendDrawToWand(dibujo_a, dibujo_a_color);
       }
