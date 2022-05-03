@@ -280,11 +280,83 @@ void loop_povRGB() {
 
     //parte para los dibujos
     else if ( 96 > ascii < 123) {//letras minusculas 97 - 122
-      if (letraActual == 'a') {
+      if (letraActual == 'a' && 1 <= nDibus ) {
         sendDrawToWand(dibujo_a, dibujo_a_color);
       }
-      else if (letraActual == 'b') {
+      else if (letraActual == 'b' && 2 <= nDibus ) {
         sendDrawToWand(dibujo_b, dibujo_b_color);
+      }
+      else if (letraActual == 'c' && 3 <= nDibus ) {
+        sendDrawToWand(dibujo_c, dibujo_c_color);
+      }
+      else if (letraActual == 'd' && 4 <= nDibus ) {
+        sendDrawToWand(dibujo_d, dibujo_d_color);
+      }
+      else if (letraActual == 'e' && 5 <= nDibus ) {
+        sendDrawToWand(dibujo_e, dibujo_e_color);
+      }
+      else if (letraActual == 'f' && 6 <= nDibus ) {
+        sendDrawToWand(dibujo_f, dibujo_f_color);
+      }
+      else if (letraActual == 'g' && 7 <= nDibus ) {
+        sendDrawToWand(dibujo_g, dibujo_g_color);
+      }
+      else if (letraActual == 'h' && 8 <= nDibus ) {
+        sendDrawToWand(dibujo_h, dibujo_h_color);
+      }
+      else if (letraActual == 'i' && 9 <= nDibus ) {
+        sendDrawToWand(dibujo_i, dibujo_i_color);
+      }
+      else if (letraActual == 'j' && 10 <= nDibus ) {
+        sendDrawToWand(dibujo_j, dibujo_j_color);
+      }
+      else if (letraActual == 'k' && 11 <= nDibus ) {
+        sendDrawToWand(dibujo_k, dibujo_k_color);
+      }
+      else if (letraActual == 'l' && 12 <= nDibus ) {
+        sendDrawToWand(dibujo_l, dibujo_l_color);
+      }
+      else if (letraActual == 'm' && 13 <= nDibus ) {
+        sendDrawToWand(dibujo_m, dibujo_m_color);
+      }
+      else if (letraActual == 'n' && 14 <= nDibus ) {
+        sendDrawToWand(dibujo_n, dibujo_n_color);
+      }
+      else if (letraActual == 'o' && 15 <= nDibus ) {
+        sendDrawToWand(dibujo_o, dibujo_o_color);
+      }
+      else if (letraActual == 'p' && 16 <= nDibus ) {
+        sendDrawToWand(dibujo_p, dibujo_p_color);
+      }
+      else if (letraActual == 'q' && 17 <= nDibus ) {
+        sendDrawToWand(dibujo_q, dibujo_q_color);
+      }
+      else if (letraActual == 'r' && 18 <= nDibus ) {
+        sendDrawToWand(dibujo_r, dibujo_r_color);
+      }
+      else if (letraActual == 's' && 19 <= nDibus ) {
+        sendDrawToWand(dibujo_s, dibujo_s_color);
+      }
+      else if (letraActual == 't' && 20 <= nDibus ) {
+        sendDrawToWand(dibujo_t, dibujo_t_color);
+      }
+      else if (letraActual == 'u' && 21 <= nDibus ) {
+        sendDrawToWand(dibujo_u, dibujo_u_color);
+      }
+      else if (letraActual == 'v' && 22 <= nDibus ) {
+        sendDrawToWand(dibujo_v, dibujo_v_color);
+      }
+      else if (letraActual == 'w' && 23 <= nDibus ) {
+        sendDrawToWand(dibujo_w, dibujo_w_color);
+      }
+      else if (letraActual == 'x' && 24 <= nDibus ) {
+        sendDrawToWand(dibujo_x, dibujo_x_color);
+      }
+      else if (letraActual == 'y' && 25 <= nDibus ) {
+        sendDrawToWand(dibujo_y, dibujo_y_color);
+      }
+      else if (letraActual == 'z' && 26 <= nDibus ) {
+        sendDrawToWand(dibujo_z, dibujo_z_color);
       }
     }
 
