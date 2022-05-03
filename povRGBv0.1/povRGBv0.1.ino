@@ -7,24 +7,17 @@
   CHECK-agregar numeros
   CHECK-que los dibujos se guarden en letras minusculas
   CHECK -agregar funcion para colorear por columna
-  separar el programa de los datos en dos archivos
+  CHECK -separar el programa de los datos en dos archivos
   CHECK-agregar boolean para invertir
   CHECK-funcion para dibujar recibe el string
 */
 
 #include <avr/pgmspace.h>//need to store letter arrays in flash memory- or else we run out of space, more info here: http://arduino.cc/en/Reference/PROGMEM
 
-String povtext = "HOLA ab "; //PUT YOUR MESSAGE HERE!!- must be in all caps, spaces are fine, no punctuation
-//String povtext = " FOR THE FUN OF IT ";
-byte refreshrate = 1;//delay time for pixels to refresh in milliseconds- experiment with different values
+String povtext = " a b c"; //PUT YOUR MESSAGE HERE!!- must be in all caps, spaces are fine, no punctuation
 
-//variable para setear los colores del texto
-String povtext_color = "WWWW";
-
-boolean invertir = false;
-
-//get length of string povtext
-int dimtext = povtext.length();
+//setear los colores del texto
+String povtext_color = " W W W ";
 
 //array para el patron de inicio
 const boolean load[] = {
@@ -42,7 +35,8 @@ const boolean load[] = {
 //--------------------------------------------------------------------------------------------------------
 // REEMPLAZAR AQUI CON LOS DIBUJOS !!
 
-int nDibus = 2;
+int nDibus = 2; //máximo 26 dibus, corresponden de la a-z
+int contadorDibus = 0;
 
 const boolean dibujo_a[] PROGMEM = {
   0, 0, 0, 0, 0, 0, 0,
@@ -66,7 +60,57 @@ const boolean dibujo_b[] PROGMEM = {
   0, 0, 1, 1, 1, 0, 0,
   0, 0, 0, 1, 0, 0, 0
 };
-String dibujo_b_color = { "RRRRRRR" };
+String dibujo_b_color = { "YYYYYYY" };
+
+const boolean dibujo_c[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_c_color = { "KKKKKKK" };
+const boolean dibujo_d[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_d_color = { "KKKKKKK" };
+const boolean dibujo_e[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_e_color = { "KKKKKKK" };
+const boolean dibujo_f[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_f_color = { "KKKKKKK" };
+const boolean dibujo_g[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_g_color = { "KKKKKKK" };
+const boolean dibujo_h[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_h_color = { "KKKKKKK" };
+const boolean dibujo_i[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_i_color = { "KKKKKKK" };
+const boolean dibujo_j[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_j_color = { "KKKKKKK" };
+const boolean dibujo_k[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_k_color = { "KKKKKKK" };
+const boolean dibujo_l[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_l_color = { "KKKKKKK" };
+const boolean dibujo_m[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_m_color = { "KKKKKKK" };
+const boolean dibujo_n[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_n_color = { "KKKKKKK" };
+const boolean dibujo_o[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_o_color = { "KKKKKKK" };
+const boolean dibujo_p[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_p_color = { "KKKKKKK" };
+const boolean dibujo_q[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_q_color = { "KKKKKKK" };
+const boolean dibujo_r[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_r_color = { "KKKKKKK" };
+const boolean dibujo_s[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_s_color = { "KKKKKKK" };
+const boolean dibujo_t[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_t_color = { "KKKKKKK" };
+const boolean dibujo_u[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_u_color = { "KKKKKKK" };
+const boolean dibujo_v[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_v_color = { "KKKKKKK" };
+const boolean dibujo_w[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_w_color = { "KKKKKKK" };
+const boolean dibujo_x[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_x_color = { "KKKKKKK" };
+const boolean dibujo_y[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_y_color = { "KKKKKKK" };
+const boolean dibujo_z[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
+String dibujo_z_color = { "KKKKKKK" };
+
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -509,7 +553,13 @@ int altoLetra = 8;
 int ascii;
 char letraActual;
 
-int delayInicio = 100;
+//get length of string povtext
+int dimtext = povtext.length();
+
+boolean invertir = false;
+
+byte refreshrate = 1;//delay time for pixels to refresh in milliseconds- experiment with different values
+int delayInicio = 50;
 
 void setup() {
   setup_povRGB();
