@@ -9,12 +9,11 @@
  con una varita POV
  
  //CONTROLES//
- click izq -> color
- click der -> negro
+ click izq -> pintar
+ click der -> borrar
  1-7 -> colorear columnas
  enter -> guardar img y array de datos
  barra -> limpia la pantalla
- text
  
  TAREA
  CHECK-diferenciar dibus B&W de color, 1-0, WRGBCMYB
@@ -30,7 +29,7 @@
  CHECK-dibujar numeros 0-9
  CHECK-si no hubo cambios  que no deje guardar
  -a la intro agregar una musiquita y unos gifs
- -mostrar controles al inicio (click izq, der, barra, enter)
+ CHECK-mostrar controles al inicio (click izq, der, barra, enter)
  CHECK-que muestre cuantos dibujos guardó
  -poder hacer mas grande el lienzo
  CHECK-corregir nombre del string de colores cuando guarda
@@ -108,7 +107,24 @@ void setup() {
 
   fill(255);
   text("POV RGB para dibujar", xTexto - espaciado, yTexto - espaciado);
-  text(consigna, xTexto, yTexto);
+  text("Nombre de archivo:", xTexto, yTexto);
+  
+  int yTextoCon = 330;
+  text("CONTROLES", xTexto - espaciado, yTextoCon);
+  text("click izq -> pintar", xTexto, yTextoCon + espaciado);
+  text("click der -> borrar", xTexto, yTextoCon + espaciado *2);
+  text("1-7 -> colorear columnas", xTexto, yTextoCon + espaciado *3);
+  text("enter -> guardar img y array de datos", xTexto, yTextoCon + espaciado *4);
+  text("barra -> limpia la pantalla", xTexto, yTextoCon + espaciado *5);
+  
+  /*
+   //CONTROLES//
+ click izq -> pintar
+ click der -> borrar
+ 1-7 -> colorear columnas
+ enter -> guardar img y array de datos
+ barra -> limpia la pantalla
+  */
 }
 
 void inicializarArray() {
@@ -150,6 +166,7 @@ void draw() {
   } else {
     flash(); //puedo usar guardado para lo del flash??
   }
+  println(mouseX + ", " + mouseY);
 }
 
 void cuadricula() {
