@@ -23,7 +23,7 @@
  CHECK-cuando guarda en colores q mantenga los bits (0, 1)
  CHECK-colores: String, no un array de char, ej: "MCRBGYW"
  CHECK-que no te deje colorear la columna si no hay bit activo 
- -que cuando inicia no te deje dibujar tan de toque
+ CHECK-que cuando inicia no te deje dibujar tan de toque
  CHECK-al guardar la imagen que haga un flash
  CHECK-cambiar el negro a "k"
  -sacar la última coma del array de datos (funciona igual...)
@@ -36,7 +36,6 @@
  CHECK-corregir nombre del string de colores cuando guarda
  
  futuro: poder cargar una imagen
- 
  
  CHECK:error: colorea bits inactivos, aunque no se vea
  
@@ -137,6 +136,8 @@ void enviarTexto() {
   cp5.remove("input");
   cp5.remove("Guardar");
   background(0);
+  tiempoRef = frameCount;
+  flash = true;
 }
 
 void draw() {
@@ -292,6 +293,7 @@ void keyPressed() {
     tiempoRef = frameCount;
     if ( guardado == false) {
       enviarTexto();
+        flash = true;
       //flash(); //se me queda en blanco la pantalla
     } else {
       if (huboCambios()) {
@@ -384,7 +386,6 @@ void keyPressed() {
         println(" ");
         huboCambios = false;
         flash = true;
-        flash();
 
         contador++;
       }
