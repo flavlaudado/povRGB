@@ -1,5 +1,5 @@
 /*
- POV - Flavia Laudado _ Mayo 2019
+ POV RGB - Flavia Laudado Nicolsd Restbergs _ Mayo 2022
  
  Dibujar en una cuadrícula
  exportar los datos en un array 
@@ -28,13 +28,14 @@
  -sacar la última coma del array de datos (funciona igual...)
  CHECK-dibujar numeros 0-9
  CHECK-si no hubo cambios  que no deje guardar
- -a la intro agregar una musiquita y unos gifs
+ -a la intro agregar una musiquita 
+ CHECK-intro con imagen
  CHECK-mostrar controles al inicio (click izq, der, barra, enter)
  CHECK-que muestre cuantos dibujos guardó
- -poder hacer mas grande el lienzo
  CHECK-corregir nombre del string de colores cuando guarda
  
  futuro: poder cargar una imagen
+ -poder hacer mas grande el lienzo
  
  CHECK:error: colorea bits inactivos, aunque no se vea
  
@@ -49,8 +50,9 @@ float espaciado = 40;
 String consigna = "Nombre de archivo:"; 
 boolean guardado = false;
 String nombre, nombreArchivo;
+PImage plaquita;
 
-int columnas = 7;//19;
+int columnas = 7;
 int filas = 8; //correspondiente a 8 LEDs
 int anchoPixel, altoPixel;
 int nH, nV;
@@ -74,7 +76,8 @@ boolean flash = false;
 
 void setup() {
   //fullScreen();
-  size(700, 800);
+  size(525, 600);
+  //size(700, 800);
   background(0);
 
   imgOut = createImage(width, height, ALPHA); 
@@ -82,6 +85,9 @@ void setup() {
   anchoPixel = width/columnas;
   altoPixel = height/filas;
   inicializarArray();
+
+  plaquita = loadImage("nico.png");
+  image(plaquita, 375, 200);
 
   cp5 = new ControlP5(this);
 
@@ -108,7 +114,7 @@ void setup() {
   fill(255);
   text("POV RGB para dibujar", xTexto - espaciado, yTexto - espaciado);
   text("Nombre de archivo:", xTexto, yTexto);
-  
+
   int yTextoCon = 330;
   text("CONTROLES", xTexto - espaciado, yTextoCon);
   text("click izq -> pintar", xTexto, yTextoCon + espaciado);
@@ -116,15 +122,6 @@ void setup() {
   text("1-7 -> colorear columnas", xTexto, yTextoCon + espaciado *3);
   text("enter -> guardar img y array de datos", xTexto, yTextoCon + espaciado *4);
   text("barra -> limpia la pantalla", xTexto, yTextoCon + espaciado *5);
-  
-  /*
-   //CONTROLES//
- click izq -> pintar
- click der -> borrar
- 1-7 -> colorear columnas
- enter -> guardar img y array de datos
- barra -> limpia la pantalla
-  */
 }
 
 void inicializarArray() {
@@ -166,7 +163,6 @@ void draw() {
   } else {
     flash(); //puedo usar guardado para lo del flash??
   }
-  println(mouseX + ", " + mouseY);
 }
 
 void cuadricula() {
@@ -310,7 +306,7 @@ void keyPressed() {
     tiempoRef = frameCount;
     if ( guardado == false) {
       enviarTexto();
-        flash = true;
+      flash = true;
       //flash(); //se me queda en blanco la pantalla
     } else {
       if (huboCambios()) {
@@ -355,10 +351,10 @@ void keyPressed() {
 
         //output.println(" ");
         output.println("};");
-        output.println(" ");
+        //output.println(" ");
 
         print("colors: ");
-        output.print("String dibujo_" + charNombre + "_color = { \"" );
+        output.print("String dibujo_" + charNombre + "_color = \"" );
 
         for (int n = 0; n < columnas; n++) {
           char charColor = ' ';
@@ -394,8 +390,10 @@ void keyPressed() {
            print( ", ");
            } */
         }
-        output.print("\" };");
-        output.println(" ");
+        output.print("\";");
+        output.println("");
+        output.println("");
+        output.println("");
 
         output.flush(); 
         //output.close();
@@ -407,15 +405,14 @@ void keyPressed() {
         contador++;
       }
     }
-
-    if (key==' ') {
-      fill(0);
-      rect(0, 0, width, height);
-      for (int i = 0; i < columnas; i++) {
-        colorColumna[i] = 1;
-        for (int j = 0; j < filas; j++) {
-          arrayBits[i][j] = 0;
-        }
+  }
+  if (key==' ') {
+    fill(0);
+    rect(0, 0, width, height);
+    for (int i = 0; i < columnas; i++) {
+      colorColumna[i] = 0;
+      for (int j = 0; j < filas; j++) {
+        arrayBits[i][j] = 0;
       }
     }
   }
@@ -436,7 +433,6 @@ boolean columnaActiva(int _i) {
 }
 
 void flash() {
-  //fLASH blanco
   fill(255);
   rect(0, 0, width, height);
   if (frameCount >= tiempoRef + intervalo) {
@@ -447,9 +443,9 @@ void flash() {
 }
 
 void nDibujos() {
-  textSize(12);
+  textSize(10);
   fill(127);
-  rect(0, 0, 100, 20);
+  rect(0, 0, 75, 20);
   fill(255);
   text("Dibujo Nro: " + contador, 5, 12);
 }
