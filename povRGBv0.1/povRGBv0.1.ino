@@ -1,26 +1,32 @@
 /*
-  TAREA
-  CHECK actualizar a letras chicas
-  CHECK borrar todo lo que no sirva:
-        -port B y C -> data1 y data3
-        -Boton q cambia color
-  CHECK-agregar numeros
-  CHECK-que los dibujos se guarden en letras minusculas
-  CHECK -agregar funcion para colorear por columna
-  CHECK -separar el programa de los datos en dos archivos
-  CHECK-agregar boolean para invertir
-  CHECK-funcion para dibujar recibe el string
-*/
+   POV RGB - Mayo 2022 - Flavia Laudado, Nicolas Restbergs
 
+   APP PARA VISUALIZAR EN UNA VARITA POV RGB
+
+   Ingresa tu texto y dibujos !!
+   
+*/
 #include <avr/pgmspace.h>//need to store letter arrays in flash memory- or else we run out of space, more info here: http://arduino.cc/en/Reference/PROGMEM
 
-String povtext = " a b c"; //PUT YOUR MESSAGE HERE!!- must be in all caps, spaces are fine, no punctuation
+//--------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+//AGREGAR TEXTO A MOSTRAR
+//--------------------------------------------------------------------------------------------------------
 
-//setear los colores del texto
-String povtext_color = " W W W ";
+//texto: SIEMPRE EN MAYÚSCULAS
+//dibus: en letras minúsculas
+String povtext = " POV RGB a b a "; 
+//String povtext = " HOLA MUNDO ! "; 
+
+//setear color del texto: W R G B C M Y
+char povtext_color = "M";
+
+//--------------------------------------------------------------------------------------------------------
+// PATRÓN DE INICIO
+//--------------------------------------------------------------------------------------------------------
 
 //array para el patron de inicio
-const boolean load[] = {
+const boolean patronInicio[] = {
   1, 0, 0, 0, 0, 0, 0, 0,
   0, 1, 0, 0, 0, 0, 0, 0,
   0, 0, 1, 0, 0, 0, 0, 0,
@@ -30,13 +36,14 @@ const boolean load[] = {
   0, 0, 0, 0, 0, 0, 1, 0,
   0, 0, 0, 0, 0, 0, 0, 1
 };
-
+int tiempoInicio = 50;
 
 //--------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
 // REEMPLAZAR AQUI CON LOS DIBUJOS !!
-
-int nDibus = 2; //máximo 26 dibus, corresponden de la a-z
-int contadorDibus = 0;
+//--------------------------------------------------------------------------------------------------------
+//Cantidad de dibus, máximo 26, corresponden de la a-z
+int nDibus = 2; 
 
 const boolean dibujo_a[] PROGMEM = {
   0, 0, 0, 0, 0, 0, 0,
@@ -46,7 +53,7 @@ const boolean dibujo_a[] PROGMEM = {
   1, 1, 1, 1, 1, 1, 1,
   0, 1, 1, 1, 1, 1, 0,
   0, 0, 1, 1, 1, 0, 0,
-  0, 0, 0, 1, 0, 0, 0
+  0, 0, 0, 1, 0, 0, 0,
 };
 String dibujo_a_color = { "MMMMMMMM" };
 
@@ -62,55 +69,77 @@ const boolean dibujo_b[] PROGMEM = {
 };
 String dibujo_b_color = { "YYYYYYY" };
 
-const boolean dibujo_c[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_c_color = { "KKKKKKK" };
-const boolean dibujo_d[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_d_color = { "KKKKKKK" };
-const boolean dibujo_e[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_e_color = { "KKKKKKK" };
-const boolean dibujo_f[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_f_color = { "KKKKKKK" };
-const boolean dibujo_g[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_g_color = { "KKKKKKK" };
-const boolean dibujo_h[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_h_color = { "KKKKKKK" };
-const boolean dibujo_i[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_i_color = { "KKKKKKK" };
-const boolean dibujo_j[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_j_color = { "KKKKKKK" };
-const boolean dibujo_k[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_k_color = { "KKKKKKK" };
-const boolean dibujo_l[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_l_color = { "KKKKKKK" };
-const boolean dibujo_m[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_m_color = { "KKKKKKK" };
-const boolean dibujo_n[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_n_color = { "KKKKKKK" };
-const boolean dibujo_o[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_o_color = { "KKKKKKK" };
-const boolean dibujo_p[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_p_color = { "KKKKKKK" };
-const boolean dibujo_q[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_q_color = { "KKKKKKK" };
-const boolean dibujo_r[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_r_color = { "KKKKKKK" };
-const boolean dibujo_s[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_s_color = { "KKKKKKK" };
-const boolean dibujo_t[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_t_color = { "KKKKKKK" };
-const boolean dibujo_u[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_u_color = { "KKKKKKK" };
-const boolean dibujo_v[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_v_color = { "KKKKKKK" };
-const boolean dibujo_w[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_w_color = { "KKKKKKK" };
-const boolean dibujo_x[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_x_color = { "KKKKKKK" };
-const boolean dibujo_y[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_y_color = { "KKKKKKK" };
-const boolean dibujo_z[] PROGMEM = {  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0 };
-String dibujo_z_color = { "KKKKKKK" };
+const boolean dibujo_c[] PROGMEM = { };
+String dibujo_c_color = "";
 
+const boolean dibujo_d[] PROGMEM = { };
+String dibujo_d_color = "";
+
+const boolean dibujo_e[] PROGMEM = { };
+String dibujo_e_color = "";
+
+const boolean dibujo_f[] PROGMEM = { };
+String dibujo_f_color = "";
+
+const boolean dibujo_g[] PROGMEM = { };
+String dibujo_g_color = "";
+
+const boolean dibujo_h[] PROGMEM = { };
+String dibujo_h_color = "";
+
+const boolean dibujo_i[] PROGMEM = { };
+String dibujo_i_color = "";
+
+const boolean dibujo_j[] PROGMEM = { };
+String dibujo_j_color = "";
+
+const boolean dibujo_k[] PROGMEM = { };
+String dibujo_k_color = "";
+
+const boolean dibujo_l[] PROGMEM = { };
+String dibujo_l_color = "";
+
+const boolean dibujo_m[] PROGMEM = { };
+String dibujo_m_color = "";
+
+const boolean dibujo_n[] PROGMEM = { };
+String dibujo_n_color = "";
+
+const boolean dibujo_o[] PROGMEM = { };
+String dibujo_o_color = "";
+
+const boolean dibujo_p[] PROGMEM = { };
+String dibujo_p_color = "";
+
+const boolean dibujo_q[] PROGMEM = { };
+String dibujo_q_color = "";
+
+const boolean dibujo_r[] PROGMEM = { };
+String dibujo_r_color = "";
+
+const boolean dibujo_s[] PROGMEM = { };
+String dibujo_s_color = "";
+
+const boolean dibujo_t[] PROGMEM = { };
+String dibujo_t_color = "";
+
+const boolean dibujo_u[] PROGMEM = { };
+String dibujo_u_color = "";
+
+const boolean dibujo_v[] PROGMEM = { };
+String dibujo_v_color = "";
+
+const boolean dibujo_w[] PROGMEM = { };
+String dibujo_w_color = "";
+
+const boolean dibujo_x[] PROGMEM = { };
+String dibujo_x_color = "";
+
+const boolean dibujo_y[] PROGMEM = { };
+String dibujo_y_color = "";
+
+const boolean dibujo_z[] PROGMEM = { };
+String dibujo_z_color = "";
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -556,10 +585,15 @@ char letraActual;
 //get length of string povtext
 int dimtext = povtext.length();
 
+int contadorDibus = 0;
 boolean invertir = false;
 
+//Para colorear por letra activar el boolean
+boolean colorPorLetra = false;
+//tiene que tener mismo largo que el texto
+String povtext_colorporLetra = " WCMY ";
+
 byte refreshrate = 1;//delay time for pixels to refresh in milliseconds- experiment with different values
-int delayInicio = 50;
 
 void setup() {
   setup_povRGB();
