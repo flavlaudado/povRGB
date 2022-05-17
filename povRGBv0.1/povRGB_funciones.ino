@@ -9,14 +9,14 @@ void setup_povRGB() {
   pinMode (pinB, OUTPUT);
 
   //FLASHADAS EN EL SETUP PARA PROBAR COSAS
-  colorSetup( 'W');
-  patronInicio();
-  colorSetup( 'R');
-  patronInicio();
-  colorSetup( 'G');
-  patronInicio();
-  colorSetup( 'B');
-  patronInicio();
+  colorear( 'W');
+  inicializarLEDs();
+  colorear( 'R');
+  inicializarLEDs();
+  colorear( 'G');
+  inicializarLEDs();
+  colorear( 'B');
+  inicializarLEDs();
 }
 
 //FUNCIONES-------------------------------------------------------------------------------------
@@ -52,7 +52,7 @@ void sendDrawToWand(const boolean letterArray[], String colorDibujo) { //functio
     // l es la fila del array
 
     //coloreo segun su String asociado, falta recibir String
-    colorSetup(colorDibujo.charAt(t));
+    colorear(colorDibujo.charAt(t));
 
     //PINES 0-7 D
     for (l = 0; l < altoLetra; l++) { //for next eight rows of data
@@ -69,7 +69,7 @@ void sendDrawToWand(const boolean letterArray[], String colorDibujo) { //functio
 }
 
 //funcion para pasarle los colores con las letras W,R,G,B,Y,C,M
-void colorSetup(char _n) { //que no se llama mas n
+void colorear(char _n) { //que no se llama mas n
   if  ( _n == 'W') {
     digitalWrite(pinB, HIGH);
     digitalWrite(pinG, HIGH);
@@ -117,19 +117,18 @@ void colorSetup(char _n) { //que no se llama mas n
   }
 }
 
-void patronInicio() {
-
+void inicializarLEDs() {
   //run intialization so we know device is working- leds should light up in order from top of wand to bottom
   for (byte j = 0; j < altoLetra; j++) { //for each time step
 
     for (byte i = 0; i < altoLetra; i++) { //for next eight rows of data
       data2 = data2 << 1;//bitwise shift left
-      data2 |= load[(i * altoLetra + j)]; //add next value from dataset
+      data2 |= patronInicio[(i * altoLetra + j)]; //add next value from dataset
     }
 
     PORTD = data2;
 
-    delay(delayInicio);
+    delay(tiempoInicio);
   }
   //clear data storage
   data2 = 0;
@@ -159,8 +158,12 @@ void loop_povRGB() {
     ascii = int(povtext.charAt(n));
     letraActual = povtext.charAt(n);
 
-    //acá aplico el color, colores: WRGBYCM
-    colorSetup(povtext_color.charAt(n));
+    //acá aplico el color, para el texto
+    if (colorPorLetra == false) {
+      colorear(povtext_color);
+    } else {
+      colorear(povtext_colorporLetra.charAt(n));
+    }
 
     if (letraActual == 'A') {
       sendToWand(letterA);
