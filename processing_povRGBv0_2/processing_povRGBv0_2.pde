@@ -5,8 +5,7 @@
  exportar los datos en un array 
  y guardar cada dibujo
  
- Para desarrollar dibujos respresentados
- con una varita POV
+ Dibujos presentados con una varita POV
  
  //CONTROLES//
  click izq -> pintar
@@ -14,30 +13,6 @@
  1-7 -> colorear columnas
  enter -> guardar img y array de datos
  barra -> limpia la pantalla
- 
- TAREA
- CHECK-diferenciar dibus B&W de color, 1-0, WRGBCMYB
- CHECK-después de apretar enter no deja seguir dibujando,
- CHECK-solo dibuja en la primer columna y no deja colorear
- CHECK-cuando guarda en colores q mantenga los bits (0, 1)
- CHECK-colores: String, no un array de char, ej: "MCRBGYW"
- CHECK-que no te deje colorear la columna si no hay bit activo 
- CHECK-que cuando inicia no te deje dibujar tan de toque
- CHECK-al guardar la imagen que haga un flash
- CHECK-cambiar el negro a "k"
- -sacar la última coma del array de datos (funciona igual...)
- CHECK-dibujar numeros 0-9
- CHECK-si no hubo cambios  que no deje guardar
- -a la intro agregar una musiquita 
- CHECK-intro con imagen
- CHECK-mostrar controles al inicio (click izq, der, barra, enter)
- CHECK-que muestre cuantos dibujos guardó
- CHECK-corregir nombre del string de colores cuando guarda
- 
- futuro: poder cargar una imagen
- -poder hacer mas grande el lienzo
- 
- CHECK:error: colorea bits inactivos, aunque no se vea
  
  */
 
@@ -50,6 +25,7 @@ float espaciado = 40;
 String consigna = "Nombre de archivo:"; 
 boolean guardado = false;
 String nombre, nombreArchivo;
+char charNombre = 97;
 PImage plaquita;
 
 int columnas = 7;
@@ -67,12 +43,14 @@ int contadorColor = 0;
 int nColores = 8; //1-7
 color color1;
 int colorColumna[] = { 0, 0, 0, 0, 0, 0, 0};
+int colorColumnaAnterior[] = { 0, 0, 0, 0, 0, 0, 0};
 
 PrintWriter output;
 int contador = 0;
 int tiempoRef = 0;
 int intervalo = 7;
 boolean flash = false;
+boolean p = true;
 
 void setup() {
   //fullScreen();
@@ -86,9 +64,13 @@ void setup() {
   altoPixel = height/filas;
   inicializarArray();
 
-  plaquita = loadImage("nico.png");
+  plaquita = loadImage("nico.jpg");
   image(plaquita, 375, 200);
 
+  inicializarTexto();
+}
+
+void inicializarTexto() {
   cp5 = new ControlP5(this);
 
   PFont font = createFont("calibri", 20);
@@ -154,14 +136,13 @@ void enviarTexto() {
 }
 
 void draw() {
-  //guardado = true;
   if (flash == false) {
     if (guardado) {
       dibujar();
       cuadricula();
     }
   } else {
-    flash(); //puedo usar guardado para lo del flash??
+    flash();
   }
 }
 
@@ -254,12 +235,14 @@ void actualizarColorColumna(int tecla) {
   if (colorColumna[tecla] >= nColores) {
     colorColumna[tecla] = 1;
   }
-  //print(", " + colorColumna[tecla]);
   colorear();
 }
 
 boolean huboCambios() {
   for (int i = 0; i < columnas; i++) {
+    if (colorColumna[i] != colorColumnaAnterior[i]) {
+      huboCambios = true;
+    }
     for (int j = 0; j < filas; j++) {
       if (arrayBits[i][j] != arrayBitsAnterior[i][j]) {
         huboCambios = true;
@@ -293,33 +276,22 @@ void keyPressed() {
     actualizarColorColumna(6);
   }
 
-  if (key=='p') { //PARA PRUEBAS
-    print("colors: ");
-    for (int n = 0; n < columnas; n++) {
-      print("color: " + colorColumna[n] + ", ");
-    }
-    println("");
-  }
-
   //GUARDADO DEL ARCHIVO
-  if (key == ENTER) { //que cuando guarde haga el flash
+  if (key == ENTER) { 
     tiempoRef = frameCount;
     if ( guardado == false) {
       enviarTexto();
       flash = true;
-      //flash(); //se me queda en blanco la pantalla
     } else {
       if (huboCambios()) {
         tiempoRef = frameCount;
         imgOut = get();
-        saveFrame(nombre + contador + ".jpg");//no deberia guardar nombre de char
+        saveFrame(nombre + ", " + charNombre + ".jpg");
         int mitadAnchoPixel = anchoPixel/2;
         int mitadAltoPixel = altoPixel/2;
 
         //println("Dibujo nro " + contador + ": ");
         //output.println("const boolean dibujo_" + contador + "[] PROGMEM = {" );
-        char charNombre = 0;
-        charNombre = char(contador + 97);
         println("Dibujo nro " + charNombre + ": ");
         output.println("const boolean dibujo_" + charNombre + "[] PROGMEM = {" );
 
@@ -349,9 +321,7 @@ void keyPressed() {
           output.println(" ");
         }
 
-        //output.println(" ");
         output.println("};");
-        //output.println(" ");
 
         print("colors: ");
         output.print("String dibujo_" + charNombre + "_color = \"" );
@@ -400,13 +370,17 @@ void keyPressed() {
 
         println(" ");
         huboCambios = false;
+        arrayCopy(arrayBits, arrayBitsAnterior);
+        arrayCopy(colorColumna, colorColumnaAnterior);
         flash = true;
 
+        charNombre++;
         contador++;
       }
     }
   }
-  if (key==' ') {
+
+  if (key==' ') {//limpia la pantalla
     fill(0);
     rect(0, 0, width, height);
     for (int i = 0; i < columnas; i++) {
@@ -414,6 +388,13 @@ void keyPressed() {
       for (int j = 0; j < filas; j++) {
         arrayBits[i][j] = 0;
       }
+    }
+  }
+  if (key=='d') { //PARA PRUEBAS
+    if (p == true) {
+      p = false;
+    } else {
+      p = true;
     }
   }
 }
@@ -443,9 +424,11 @@ void flash() {
 }
 
 void nDibujos() {
-  textSize(10);
-  fill(127);
-  rect(0, 0, 75, 20);
-  fill(255);
-  text("Dibujo Nro: " + contador, 5, 12);
+  if (p == true) {
+    textSize(10);
+    fill(127);
+    rect(0, 0, 75, 20);
+    fill(255);
+    text("Dibujo: " + charNombre, 5, 12);
+  }
 }
