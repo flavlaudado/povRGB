@@ -2,7 +2,7 @@
    POV RGB - Mayo 2022 - Flavia Laudado, Nicolas Restbergs
    APP PARA VISUALIZAR EN UNA VARITA POV RGB
    Ingresa tu texto y dibujos !!
-   
+
 */
 #include <avr/pgmspace.h>//need to store letter arrays in flash memory- or else we run out of space, more info here: http://arduino.cc/en/Reference/PROGMEM
 
@@ -13,8 +13,8 @@
 
 //texto: SIEMPRE EN MAYÚSCULAS
 //dibus: en letras minúsculas
-String povtext = " POV RGB a b "; 
-//String povtext = " HOLA MUNDO ! "; 
+String povtext = " POV RGB a b ";
+//String povtext = " HOLA MUNDO ! ";
 
 //setear color del texto: W R G B C M Y
 char povtext_color = "M";
@@ -23,9 +23,8 @@ char povtext_color = "M";
 // PATRÓN DE INICIO
 //--------------------------------------------------------------------------------------------------------
 
-int repeticionInicio = 7;
-String colorInicio = "WRGBCMY"; //tiene que haber tantas letras como repeticiones
-int tiempoInicio = 200;// 50;
+String colorInicio = "WRGBCMY";
+int tiempoInicio = 100;// 50;
 
 //array para el patron de inicio
 const boolean patronInicio[] = {
@@ -37,7 +36,7 @@ const boolean patronInicio[] = {
   0, 0, 0, 0, 0, 1, 0, 0,
   0, 0, 0, 0, 0, 0, 1, 0,
   0, 0, 0, 0, 0, 0, 0, 1
-}; 
+};
 
 
 
@@ -46,7 +45,7 @@ const boolean patronInicio[] = {
 // REEMPLAZAR AQUI CON LOS DIBUJOS !!
 //--------------------------------------------------------------------------------------------------------
 //Cantidad de dibus, máximo 26, corresponden de la a-z
-int nDibus = 2; 
+int nDibus = 2;
 
 const boolean dibujo_a[] PROGMEM = {
   0, 0, 0, 0, 0, 0, 0,
@@ -566,29 +565,46 @@ const boolean letter9[] PROGMEM = {
   0, 0, 0, 0, 0, 0, 0
 };
 
-//incoming data storage
+//--------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+//variables generales
+//--------------------------------------------------------------------------------------------------------
+
+
+//byte con la data que prende y apaga los LEDs
 byte data2 = 0;//for portD
 
-//pines a los transistores RGB
+//pines para los transistores RGB
 const byte pinR = 11;
 const byte pinG = 10;
 const byte pinB = 9;
 
-//variables
-byte n; //variable for loops
-byte m; //variable for loops
-byte t; //variable for loops
-byte l; //variable for loops
+//variables generales
+byte n;
+byte m;
+byte t;
+byte l;
+
+//tiempo en milisegundos de refresco entre pixeles, se puede cambiar!
+byte refreshrate = 1;
 
 int anchoLetra = 7;
 int altoLetra = 8;
 int ascii;
 char letraActual;
 
-//get length of string povtext
+//largo del texto
 int dimtext = povtext.length();
+//cantidad de repeticiones del patron de inicio
+int repeticionInicio = colorInicio.length();
 
 int contadorDibus = 0;
+
+//--------------------------------------------------------------------------------------------------------
+//flashadas
+//--------------------------------------------------------------------------------------------------------
+
+//Usar los LEDs invertidos, como un negativo
 boolean invertir = false;
 
 //Para colorear por letra activar el boolean
@@ -596,12 +612,16 @@ boolean colorPorLetra = false;
 //tiene que tener mismo largo que el texto
 String povtext_colorporLetra = " WCMY ";
 
-byte refreshrate = 1;//delay time for pixels to refresh in milliseconds- experiment with different values
+//Para que no loopee
+boolean noLoop = false;
+
 
 void setup() {
   setup_povRGB();
 }
 
 void loop() {
-  loop_povRGB();
+  if (noLoop == false) {
+    loop_povRGB();
+  }
 }
