@@ -13,7 +13,7 @@
 
 //texto: SIEMPRE EN MAYÚSCULAS
 //dibus: en letras minúsculas
-String povtext = " POV RGB a b a "; 
+String povtext = " POV RGB a b "; 
 //String povtext = " HOLA MUNDO ! "; 
 
 //setear color del texto: W R G B C M Y
@@ -22,6 +22,10 @@ char povtext_color = "M";
 //--------------------------------------------------------------------------------------------------------
 // PATRÓN DE INICIO
 //--------------------------------------------------------------------------------------------------------
+
+int repeticionInicio = 7;
+String colorInicio = "WRGBCMY"; //tiene que haber tantas letras como repeticiones
+int tiempoInicio = 200;// 50;
 
 //array para el patron de inicio
 const boolean patronInicio[] = {
@@ -33,8 +37,9 @@ const boolean patronInicio[] = {
   0, 0, 0, 0, 0, 1, 0, 0,
   0, 0, 0, 0, 0, 0, 1, 0,
   0, 0, 0, 0, 0, 0, 0, 1
-};
-int tiempoInicio = 50;
+}; 
+
+
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
