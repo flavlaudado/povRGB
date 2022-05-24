@@ -8,13 +8,13 @@ void setup_povRGB() {
   pinMode (pinB, OUTPUT);
 
   //FLASHADAS EN EL SETUP PARA PROBAR COSAS
-  //armar un for con los ciclos
-  //y recorre un String con los colores
   for (int i = 0; i < repeticionInicio; i++) {
     colorear(colorInicio.charAt(i));
     inicializarLEDs();
   }
-
+  if (noLoop) {
+    loop_povRGB();
+  }
 }
 
 //FUNCIONES-------------------------------------------------------------------------------------
@@ -23,10 +23,9 @@ void setup_povRGB() {
 //funcion para mandar cada caracter de texto
 void sendToWand(const boolean letterArray[]) {
 
-  for (t = 0; t < anchoLetra; t++) { //recorre cada columna (time step)
-    // l es la fila del array
+  for (t = 0; t < anchoLetra; t++) { //t -> cada columna, recorre cada columna (time step)
 
-    for (l = 0; l < altoLetra; l++) { //recorre las ocho filas
+    for (l = 0; l < altoLetra; l++) { //l -> cada fila
       data2 = data2 << 1;//desplazamiento bit a bit a la izquierda
       data2 |= pgm_read_byte_near(letterArray + (l * anchoLetra + t)); //agrega un nuevo valor al byte
     }
@@ -115,7 +114,7 @@ void colorear(char _color) {
 }
 
 void inicializarLEDs() {
-  //Inicializaciónd e los LEDs, apr acomprobar que funciona todo bien
+  //Inicialización de los LEDs, para comprobar que funciona todo bien
   for (byte j = 0; j < altoLetra; j++) {
 
     for (byte i = 0; i < altoLetra; i++) {
@@ -144,22 +143,23 @@ void apagarLEDs(int tiempo) {
 
 void loop_povRGB() {
 
-  //space at beginning of text
-  //PORTD = 0;// aca apaga todo el PORTD
+  //al comenzar apaga todo
   apagarLEDs(3);
 
-  for (n = 0; n < dimtext; n++) { //go through each character of povtext and call function sendToWand to display letter
+  for (n = 0; n < dimtext; n++) { //recorre el texto para mostrarlo
 
+    //obtiene la letra a mostrar, el caracter y el ascii
     ascii = int(povtext.charAt(n));
     letraActual = povtext.charAt(n);
 
-    //acá aplico el color, para el texto
+    //aplica el color, para el texto
     if (colorPorLetra == false) {
       colorear(povtext_color);
     } else {
       colorear(povtext_colorporLetra.charAt(n));
     }
 
+    //busca el array de cada caracter y lo muestra en la varita
     if (letraActual == 'A') {
       sendToWand(letterA);
     }
@@ -276,8 +276,8 @@ void loop_povRGB() {
       apagarLEDs(3); //off for 3 times
     }
 
-    //parte para los dibujos
-    else if ( 96 > ascii < 123) {//letras minusculas 97 - 122
+    //busca los dibujos y los muestra
+    else if ( 97 >= ascii <= 122) {//letras minusculas 97 - 122
       if (letraActual == 'a' && 1 <= nDibus ) {
         sendDrawToWand(dibujo_a, dibujo_a_color);
       }
@@ -358,12 +358,11 @@ void loop_povRGB() {
       }
     }
 
-    //space between each character
-    //PORTD = 0 ;//apaga el PORTD
+    //espacio entre cada caracter
     apagarLEDs(1);
   }
 
-  //space at end of text
+  //espacio al final del texto
   apagarLEDs(3);
 
 }
