@@ -8,14 +8,13 @@ void setup_povRGB() {
   pinMode (pinB, OUTPUT);
 
   //FLASHADAS EN EL SETUP PARA PROBAR COSAS
-  colorear( 'W');
-  inicializarLEDs();
-  colorear( 'R');
-  inicializarLEDs();
-  colorear( 'G');
-  inicializarLEDs();
-  colorear( 'B');
-  inicializarLEDs();
+  //armar un for con los ciclos
+  //y recorre un String con los colores
+  for (int i = 0; i < repeticionInicio; i++) {
+    colorear(colorInicio.charAt(i));
+    inicializarLEDs();
+  }
+
 }
 
 //FUNCIONES-------------------------------------------------------------------------------------
@@ -66,7 +65,7 @@ void sendDrawToWand(const boolean letterArray[], String colorDibujo) {
 }
 
 //funcion para pasarle los colores
-// colores posibles: W,R,G,B,Y,C,M, 
+// colores posibles: W,R,G,B,Y,C,M,
 void colorear(char _color) {
   if  ( _color == 'W') {
     digitalWrite(pinB, HIGH);
@@ -119,7 +118,7 @@ void inicializarLEDs() {
   //Inicializaciónd e los LEDs, apr acomprobar que funciona todo bien
   for (byte j = 0; j < altoLetra; j++) {
 
-    for (byte i = 0; i < altoLetra; i++) { 
+    for (byte i = 0; i < altoLetra; i++) {
       data2 = data2 << 1;
       data2 |= patronInicio[(i * altoLetra + j)];
     }
