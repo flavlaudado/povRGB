@@ -1,8 +1,6 @@
 /*
    POV RGB - Mayo 2022 - Flavia Laudado, Nicolas Restbergs
-
    APP PARA VISUALIZAR EN UNA VARITA POV RGB
-
    Ingresa tu texto y dibujos !!
    
 */
