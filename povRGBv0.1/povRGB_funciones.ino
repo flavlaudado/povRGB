@@ -1,9 +1,8 @@
 void setup_povRGB() {
-  //port/pin assignments- set all pins to output- more info here: http://www.arduino.cc/en/Reference/PortManipulation
 
-  DDRD = 0xFF;//port d- digital pins 0-7
+  DDRD = 0xFF;//portD- digital pins 0-7
 
-  //para los pines que manejan el color
+  //Pines RGB
   pinMode (pinR, OUTPUT);
   pinMode (pinG, OUTPUT);
   pinMode (pinB, OUTPUT);
@@ -20,97 +19,96 @@ void setup_povRGB() {
 }
 
 //FUNCIONES-------------------------------------------------------------------------------------
-void sendToWand(const boolean letterArray[]) { //function to get array data
+//----------------------------------------------------------------------------------------------
 
-  //una funcion para mandar los colores en String asociado
+//funcion para mandar cada caracter de texto
+void sendToWand(const boolean letterArray[]) {
 
-  for (t = 0; t < anchoLetra; t++) { //for each time step
+  for (t = 0; t < anchoLetra; t++) { //recorre cada columna (time step)
     // l es la fila del array
 
-    //PINES 0-7 D
-    for (l = 0; l < altoLetra; l++) { //for next eight rows of data
-      data2 = data2 << 1;//bitwise shift left
-      data2 |= pgm_read_byte_near(letterArray + (l * anchoLetra + t)); //add next value from dataset
+    for (l = 0; l < altoLetra; l++) { //recorre las ocho filas
+      data2 = data2 << 1;//desplazamiento bit a bit a la izquierda
+      data2 |= pgm_read_byte_near(letterArray + (l * anchoLetra + t)); //agrega un nuevo valor al byte
     }
 
-    //SET PINS:
+    //Setea los pines con cada columna del array
     PORTD = data2; //0-7
-    if (invertir == true) {
+
+    if (invertir == true) { //invierte las letras a negativo
       PORTD = PORTD ^ B11111111;
     }
     delay(refreshrate);
-    //clear data storage
+    //Limpia el byte de data
     data2 = 0;
   }
 }
 
-void sendDrawToWand(const boolean letterArray[], String colorDibujo) { //function to get array data
+//funcion para mandar cada dibujo
+void sendDrawToWand(const boolean letterArray[], String colorDibujo) {
 
-  //una funcion para mandar los colores en String asociado
+  for (t = 0; t < anchoLetra; t++) { //recorre cada columna (time step)
 
-  for (t = 0; t < anchoLetra; t++) { //for each time step
-    // l es la fila del array
-
-    //coloreo segun su String asociado, falta recibir String
+    //colorea segun el String asociado
     colorear(colorDibujo.charAt(t));
 
-    //PINES 0-7 D
-    for (l = 0; l < altoLetra; l++) { //for next eight rows of data
-      data2 = data2 << 1;//bitwise shift left
-      data2 |= pgm_read_byte_near(letterArray + (l * anchoLetra + t)); //add next value from dataset
+    for (l = 0; l < altoLetra; l++) { //recorre las ocho filas
+      data2 = data2 << 1;//desplazamiento bit a bit a la izquierda
+      data2 |= pgm_read_byte_near(letterArray + (l * anchoLetra + t)); //agrega un nuevo valor al byte
     }
 
-    //SET PINS:
+    //Setea los pines con cada columna del array
     PORTD = data2; //0-7
     delay(refreshrate);
-    //clear data storage
+    //Limpia el byte de data
     data2 = 0;
   }
 }
 
-//funcion para pasarle los colores con las letras W,R,G,B,Y,C,M
-void colorear(char _n) { //que no se llama mas n
-  if  ( _n == 'W') {
+//funcion para pasarle los colores
+// colores posibles: W,R,G,B,Y,C,M, 
+void colorear(char _color) {
+  if  ( _color == 'W') {
     digitalWrite(pinB, HIGH);
     digitalWrite(pinG, HIGH);
     digitalWrite(pinR, HIGH);
   }
-  else if ( _n == 'R') {
+  else if ( _color == 'R') {
     digitalWrite(pinB, LOW);
     digitalWrite(pinG, LOW);
     digitalWrite(pinR, HIGH);
   }
-  else if ( _n == 'G' ) {
+  else if ( _color == 'G' ) {
     digitalWrite(pinB, LOW);
     digitalWrite(pinG, HIGH);
     digitalWrite(pinR, LOW);
   }
-  else if  ( _n == 'B' ) {
+  else if  ( _color == 'B' ) {
     digitalWrite(pinB, HIGH);
     digitalWrite(pinG, LOW);
     digitalWrite(pinR, LOW);
   }
-  else if ( _n == 'Y') {
+  else if ( _color == 'Y') {
     digitalWrite(pinB, LOW);
     digitalWrite(pinG, HIGH);
     digitalWrite(pinR, HIGH);
   }
-  else if ( _n == 'C' ) {
+  else if ( _color == 'C' ) {
     digitalWrite(pinB, HIGH);
     digitalWrite(pinG, HIGH);
     digitalWrite(pinR, LOW);
   }
-  else if  ( _n == 'M' ) {
+  else if  ( _color == 'M' ) {
     digitalWrite(pinB, HIGH);
     digitalWrite(pinG, LOW);
     digitalWrite(pinR, HIGH);
   }
-  else if  ( _n == 'M' ) {
-    digitalWrite(pinB, HIGH);
+  else if  ( _color == 'K') {
+    digitalWrite(pinB, LOW);
     digitalWrite(pinG, LOW);
-    digitalWrite(pinR, HIGH);
+    digitalWrite(pinR, LOW);
   }
-  else if  ( _n == ' ') {
+  else if  ( _color == ' ') {
     digitalWrite(pinB, LOW);
     digitalWrite(pinG, LOW);
     digitalWrite(pinR, LOW);
@@ -118,21 +116,19 @@ void colorear(char _n) { //que no se llama mas n
 }
 
 void inicializarLEDs() {
-  //run intialization so we know device is working- leds should light up in order from top of wand to bottom
-  for (byte j = 0; j < altoLetra; j++) { //for each time step
+  //Inicializaciónd e los LEDs, apr acomprobar que funciona todo bien
+  for (byte j = 0; j < altoLetra; j++) {
 
-    for (byte i = 0; i < altoLetra; i++) { //for next eight rows of data
-      data2 = data2 << 1;//bitwise shift left
-      data2 |= patronInicio[(i * altoLetra + j)]; //add next value from dataset
+    for (byte i = 0; i < altoLetra; i++) { 
+      data2 = data2 << 1;
+      data2 |= patronInicio[(i * altoLetra + j)];
     }
 
     PORTD = data2;
 
     delay(tiempoInicio);
   }
-  //clear data storage
   data2 = 0;
-  //clear ports- set all arduino pins to 0Volts
   PORTD = data2;
 
 }
