@@ -1,5 +1,5 @@
 /*
- POV RGB - Flavia Laudado Nicolsd Restbergs _ Mayo 2022
+ POV RGB - Flavia Laudado Nicolas Restbergs _ Mayo 2022
  
  Dibujar en una cuadrícula
  exportar los datos en un array 
@@ -28,7 +28,7 @@ String nombre, nombreArchivo;
 char charNombre = 97;
 PImage plaquita;
 
-int columnas = 7;
+int columnas = 7; //ancho del lienzo
 int filas = 8; //correspondiente a 8 LEDs
 int anchoPixel, altoPixel;
 int nH, nV;
@@ -68,6 +68,17 @@ void setup() {
   image(plaquita, 375, 200);
 
   inicializarTexto();
+}
+
+void draw() {
+  if (flash == false) {
+    if (guardado) {
+      dibujar();
+      cuadricula();
+    }
+  } else {
+    flash();
+  }
 }
 
 void inicializarTexto() {
@@ -135,17 +146,6 @@ void enviarTexto() {
   flash = true;
 }
 
-void draw() {
-  if (flash == false) {
-    if (guardado) {
-      dibujar();
-      cuadricula();
-    }
-  } else {
-    flash();
-  }
-}
-
 void cuadricula() {
   stroke(127);
   for (int i = 0; i <= columnas; i++) {
@@ -168,7 +168,6 @@ void dibujar() { //dibuja en cada cuadrante que se hace click
     if (mouseButton == LEFT) { 
       fill(1);
       arrayBits[int(nH)][int(nV)] = 1;
-      //si esa columna está en K q pase a W
       if (colorColumna[nH] == 0) {
         colorColumna[nH] = 1;
       }
@@ -176,10 +175,8 @@ void dibujar() { //dibuja en cada cuadrante que se hace click
       fill(0);
       arrayBits[nH][nV] = 0;
       rect(nH * anchoPixel, nV * altoPixel, anchoPixel, altoPixel);
-      //si despintó  toda la columna q la pase a K
       if (columnaActiva(nH) == false) {
-        colorColumna[nH] = 0
-          ;
+        colorColumna[nH] = 0;
       }
     }
     colorear();
@@ -296,7 +293,6 @@ void keyPressed() {
         output.println("const boolean dibujo_" + charNombre + "[] PROGMEM = {" );
 
         //guardo analizando la imagen
-        //no debería simplemente guardar el arrayBits ??
 
         for (int j =mitadAltoPixel; j<imgOut.height; j += altoPixel) {
           for (int i = mitadAnchoPixel; i<imgOut.width; i += anchoPixel) {
