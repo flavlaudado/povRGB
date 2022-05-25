@@ -33,7 +33,7 @@ void sendToWand(const boolean letterArray[]) {
     //Setea los pines con cada columna del array
     PORTD = data2; //0-7
 
-    if (invertir == true) { //invierte las letras a negativo
+    if (negativo == true) { //invierte las letras a negativo
       PORTD = PORTD ^ B11111111;
     }
     delay(refreshrate);
@@ -57,6 +57,11 @@ void sendDrawToWand(const boolean letterArray[], String colorDibujo) {
 
     //Setea los pines con cada columna del array
     PORTD = data2; //0-7
+    
+    if (negativo == true) { //invierte lo dibus a negativo
+      PORTD = PORTD ^ B11111111;
+    }
+    
     delay(refreshrate);
     //Limpia el byte de data
     data2 = 0;
@@ -131,10 +136,10 @@ void inicializarLEDs() {
 
 }
 void apagarLEDs(int tiempo) {
-  if (invertir == false) {
+  if (negativo == false) {
     PORTD = 0;
   }
-  if (invertir == true) {
+  if (negativo == true) {
     PORTD = B11111111;
   }
 
@@ -154,9 +159,9 @@ void loop_povRGB() {
 
     //aplica el color, para el texto
     if (colorPorLetra == false) {
-      colorear(povtext_color);
+      colorear(povtext_color); //colorea con un solo color
     } else {
-      colorear(povtext_colorporLetra.charAt(n));
+      colorear(povtext_colorporLetra.charAt(n));//colorea por caracter
     }
 
     //busca el array de cada caracter y lo muestra en la varita
