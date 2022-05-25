@@ -13,7 +13,7 @@
 
 //texto: SIEMPRE EN MAYÚSCULAS
 //dibus: en letras minúsculas
-String povtext = " POV RGB a b ";
+String povtext = " a b ";
 //String povtext = " HOLA MUNDO ! ";
 
 //setear color del texto: W R G B C M Y
@@ -604,8 +604,8 @@ int contadorDibus = 0;
 //flashadas
 //--------------------------------------------------------------------------------------------------------
 
-//Usar los LEDs invertidos, como un negativo
-boolean invertir = false;
+//Usar los LEDs en negativo, invertir lo que prende y apaga
+boolean negativo = false;
 
 //Para colorear por letra activar el boolean
 boolean colorPorLetra = false;
