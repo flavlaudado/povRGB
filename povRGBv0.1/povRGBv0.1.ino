@@ -13,18 +13,18 @@
 
 //texto: SIEMPRE EN MAYÚSCULAS
 //dibus: en letras minúsculas
-String povtext = " a b ";
+String povtext = " HOLA a b c d e f g ";
 //String povtext = " HOLA MUNDO ! ";
 
 //setear color del texto: W R G B C M Y
-char povtext_color = "M";
+char povtext_color = "W";
 
 //--------------------------------------------------------------------------------------------------------
 // PATRÓN DE INICIO
 //--------------------------------------------------------------------------------------------------------
 
 String colorInicio = "WRGBCMY";
-int tiempoInicio = 100;// 50;
+int tiempoInicio = 50;
 
 //array para el patron de inicio
 const boolean patronInicio[] = {
@@ -45,7 +45,7 @@ const boolean patronInicio[] = {
 // REEMPLAZAR AQUI CON LOS DIBUJOS !!
 //--------------------------------------------------------------------------------------------------------
 //Cantidad de dibus, máximo 26, corresponden de la a-z
-int nDibus = 2;
+int nDibus = 7;
 
 const boolean dibujo_a[] PROGMEM = {
   0, 0, 0, 0, 0, 0, 0,
@@ -57,7 +57,7 @@ const boolean dibujo_a[] PROGMEM = {
   0, 0, 1, 1, 1, 0, 0,
   0, 0, 0, 1, 0, 0, 0,
 };
-String dibujo_a_color = { "MMMMMMMM" };
+String dibujo_a_color = { "WWWWWWW" };
 
 const boolean dibujo_b[] PROGMEM = {
   0, 0, 0, 0, 0, 0, 0,
@@ -69,22 +69,67 @@ const boolean dibujo_b[] PROGMEM = {
   0, 0, 1, 1, 1, 0, 0,
   0, 0, 0, 1, 0, 0, 0
 };
-String dibujo_b_color = { "YYYYYYY" };
+String dibujo_b_color = { "RRRRRRR" };
 
-const boolean dibujo_c[] PROGMEM = { };
-String dibujo_c_color = "";
+const boolean dibujo_c[] PROGMEM = {
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 0, 0, 0, 1, 0,
+  1, 1, 1, 0, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  0, 1, 1, 1, 1, 1, 0,
+  0, 0, 1, 1, 1, 0, 0,
+  0, 0, 0, 1, 0, 0, 0,
+};
+String dibujo_c_color = { "GGGGGGG" };
 
-const boolean dibujo_d[] PROGMEM = { };
-String dibujo_d_color = "";
+const boolean dibujo_d[] PROGMEM = {
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 0, 0, 0, 1, 0,
+  1, 1, 1, 0, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  0, 1, 1, 1, 1, 1, 0,
+  0, 0, 1, 1, 1, 0, 0,
+  0, 0, 0, 1, 0, 0, 0
+};
+String dibujo_d_color = { "BBBBBBB" };
 
-const boolean dibujo_e[] PROGMEM = { };
-String dibujo_e_color = "";
+const boolean dibujo_e[] PROGMEM = {
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 0, 0, 0, 1, 0,
+  1, 1, 1, 0, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  0, 1, 1, 1, 1, 1, 0,
+  0, 0, 1, 1, 1, 0, 0,
+  0, 0, 0, 1, 0, 0, 0,
+};
+String dibujo_e_color = { "CCCCCCC" };
 
-const boolean dibujo_f[] PROGMEM = { };
-String dibujo_f_color = "";
+const boolean dibujo_f[] PROGMEM = {
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 0, 0, 0, 1, 0,
+  1, 1, 1, 0, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  0, 1, 1, 1, 1, 1, 0,
+  0, 0, 1, 1, 1, 0, 0,
+  0, 0, 0, 1, 0, 0, 0
+};
+String dibujo_f_color = { "MMMMMMM" };
 
-const boolean dibujo_g[] PROGMEM = { };
-String dibujo_g_color = "";
+const boolean dibujo_g[] PROGMEM = {
+  0, 0, 0, 0, 0, 0, 0,
+  0, 1, 0, 0, 0, 1, 0,
+  1, 1, 1, 0, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  1, 1, 1, 1, 1, 1, 1,
+  0, 1, 1, 1, 1, 1, 0,
+  0, 0, 1, 1, 1, 0, 0,
+  0, 0, 0, 1, 0, 0, 0,
+};
+String dibujo_g_color = { "YYYYYYY" };
 
 const boolean dibujo_h[] PROGMEM = { };
 String dibujo_h_color = "";
