@@ -4,26 +4,15 @@
    Ingresa tu texto y dibujos !!
 
 */
+
 #include <avr/pgmspace.h>//need to store letter arrays in flash memory- or else we run out of space, more info here: http://arduino.cc/en/Reference/PROGMEM
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-//AGREGAR TEXTO A MOSTRAR
-//--------------------------------------------------------------------------------------------------------
-
-//texto: SIEMPRE EN MAYÚSCULAS
-//dibus: en letras minúsculas
-String povtext = " HOLA a b c d e f g ";
-//String povtext = " HOLA MUNDO ! ";
-
-//setear color del texto: W R G B C M Y
-char povtext_color = "W";
-
-//--------------------------------------------------------------------------------------------------------
 // PATRÓN DE INICIO
 //--------------------------------------------------------------------------------------------------------
 
-String colorInicio = "WRGBCMY";
+String colorInicio = "WRGBCMYW";
 int tiempoInicio = 50;
 
 //array para el patron de inicio
@@ -38,7 +27,18 @@ const boolean patronInicio[] = {
   0, 0, 0, 0, 0, 0, 0, 1
 };
 
+//--------------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------------
+// TEXTO A MOSTRAR
+//--------------------------------------------------------------------------------------------------------
 
+//texto: SIEMPRE EN MAYÚSCULAS
+//dibus: en letras minúsculas
+//String povtext = " a b c d e f g ";
+String povtext = " HOLA !!! ";
+
+//setear color del texto: W R G B C M Y
+char povtext_color = 'G'; //entre comilla simple
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -612,9 +612,8 @@ const boolean letter9[] PROGMEM = {
 
 //--------------------------------------------------------------------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-//variables generales
+// VARIABLES GENERALES
 //--------------------------------------------------------------------------------------------------------
-
 
 //byte con la data que prende y apaga los LEDs
 byte data2 = 0;//for portD
@@ -631,7 +630,7 @@ byte t;
 byte l;
 
 //tiempo en milisegundos de refresco entre pixeles, se puede cambiar!
-byte refreshrate = 1;
+byte refreshrate = 250;//1;
 
 int anchoLetra = 7;
 int altoLetra = 8;
@@ -646,10 +645,10 @@ int repeticionInicio = colorInicio.length();
 int contadorDibus = 0;
 
 //--------------------------------------------------------------------------------------------------------
-//flashadas
+// FLASHADAS
 //--------------------------------------------------------------------------------------------------------
 
-//Usar los LEDs en negativo, invertir lo que prende y apaga
+//Usar los LEDs en negativo, invierte el prendido y apagado
 boolean negativo = false;
 
 //Para colorear por letra activar el boolean
