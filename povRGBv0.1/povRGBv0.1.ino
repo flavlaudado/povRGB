@@ -2,20 +2,16 @@
    POV RGB - Mayo 2022 - Flavia Laudado, Nicolas Restbergs
    APP PARA VISUALIZAR EN UNA VARITA POV RGB
    Ingresa tu texto y dibujos !!
-
 */
 
-#include <avr/pgmspace.h>//need to store letter arrays in flash memory- or else we run out of space, more info here: http://arduino.cc/en/Reference/PROGMEM
+#include <avr/pgmspace.h> //Guarda las letras y numeros en otra memoria
 
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 // PATRÓN DE INICIO
-//--------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
-String colorInicio = "WRGBCMYW";
-int tiempoInicio = 50;
-
-//array para el patron de inicio
+//array de datos para el patron de inicio
 const boolean patronInicio[] = {
   1, 0, 0, 0, 0, 0, 0, 0,
   0, 1, 0, 0, 0, 0, 0, 0,
@@ -27,24 +23,51 @@ const boolean patronInicio[] = {
   0, 0, 0, 0, 0, 0, 0, 1
 };
 
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//Se repite un patron de inicio por cada color
+String colorInicio = "WRGBCMYW"; 
+int tiempoInicio = 50; //velocidad del patron de inicio
+
+//Para repetir patron de inicio infinitas veces poner: en true
+//Para no repetir patron de inicio poner en: false
+boolean patronLoop = false; //true or false
+
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 // TEXTO A MOSTRAR
-//--------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
-//texto: SIEMPRE EN MAYÚSCULAS
-//dibus: en letras minúsculas
-//String povtext = " a b c d e f g ";
+//texto: EN MAYÚSCULAS
+//dibus: en minúsculas
+
 String povtext = " HOLA !!! ";
+//String povtext = " a b c d e f g "; //dibus de corazones en colores
 
-//setear color del texto: W R G B C M Y
-char povtext_color = 'G'; //entre comilla simple
+//setear color del texto (W R G B C M Y)
+char povtext_color = 'Y'; //entre comilla simple
 
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+// FLASHADAS
+//----------------------------------------------------------------------------------------------
+
+//Usar los LEDs en negativo, invierte el prendido y apagado
+boolean negativo = false; //true o false
+
+//Para colorear por letra activar colorPorLetra
+boolean colorPorLetra = false; //true o false
+//tiene que tener mismo largo que el texto
+String povtext_colorporLetra = " MMCC YYY ";//W R G B C M Y
+
+//Para que no loopee, muestra el mensaje solo una vez
+boolean noLoop = false; //true o false
+
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 // REEMPLAZAR AQUI CON LOS DIBUJOS !!
-//--------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+
 //Cantidad de dibus, máximo 26, corresponden de la a-z
+//Reemplazar los dibus nuevos y dejar vacios los que no se usen
 int nDibus = 7;
 
 const boolean dibujo_a[] PROGMEM = {
@@ -188,9 +211,14 @@ String dibujo_y_color = "";
 const boolean dibujo_z[] PROGMEM = { };
 String dibujo_z_color = "";
 
-//------------------------------------------------------------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+// LETRAS Y NUMEROS
+//----------------------------------------------------------------------------------------------
 
-//The letters of the alphabet- edit the look of these if you want, just make sure the letters are 8 pixels wide
+//Se pueden modificar, y hacer tu propia tipografía
+// de 7x8 px (ancho x alto)
+
 const boolean letterA[] PROGMEM = {
   0, 0, 1, 1, 1, 0, 0,
   0, 1, 1, 1, 1, 1, 0,
@@ -610,10 +638,10 @@ const boolean letter9[] PROGMEM = {
   0, 0, 0, 0, 0, 0, 0
 };
 
-//--------------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 // VARIABLES GENERALES
-//--------------------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 
 //byte con la data que prende y apaga los LEDs
 byte data2 = 0;//for portD
@@ -629,8 +657,8 @@ byte m;
 byte t;
 byte l;
 
-//tiempo en milisegundos de refresco entre pixeles, se puede cambiar!
-byte refreshrate = 250;//1;
+//velocidad de ejecución, se puede cambiar !
+byte refreshrate = 1;
 
 int anchoLetra = 7;
 int altoLetra = 8;
@@ -643,22 +671,6 @@ int dimtext = povtext.length();
 int repeticionInicio = colorInicio.length();
 
 int contadorDibus = 0;
-
-//--------------------------------------------------------------------------------------------------------
-// FLASHADAS
-//--------------------------------------------------------------------------------------------------------
-
-//Usar los LEDs en negativo, invierte el prendido y apagado
-boolean negativo = false;
-
-//Para colorear por letra activar el boolean
-boolean colorPorLetra = false;
-//tiene que tener mismo largo que el texto
-String povtext_colorporLetra = " WCMY ";
-
-//Para que no loopee
-boolean noLoop = false;
-
 
 void setup() {
   setup_povRGB();
