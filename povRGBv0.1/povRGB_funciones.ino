@@ -7,25 +7,33 @@ void setup_povRGB() {
   pinMode (pinG, OUTPUT);
   pinMode (pinB, OUTPUT);
 
-  //FLASHADAS EN EL SETUP PARA PROBAR COSAS
+  //PATRON DE INICIO
   for (int i = 0; i < repeticionInicio; i++) {
     colorear(colorInicio.charAt(i));
     inicializarLEDs();
+  }
+  while (patronLoop) {
+    for (int i = 0; i < repeticionInicio; i++) {
+      colorear(colorInicio.charAt(i));
+      inicializarLEDs();
+    }
   }
   if (noLoop) {
     loop_povRGB();
   }
 }
 
+//----------------------------------------------------------------------------------------------
+//----------------------------------------------------------------------------------------------
 //FUNCIONES-------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------
 
 //funcion para mandar cada caracter de texto
 void sendToWand(const boolean letterArray[]) {
 
-  for (t = 0; t < anchoLetra; t++) { //t -> cada columna, recorre cada columna (time step)
+  for (t = 0; t < anchoLetra; t++) { //t -> recorre cada columna (time step)
 
-    for (l = 0; l < altoLetra; l++) { //l -> cada fila
+    for (l = 0; l < altoLetra; l++) { //l -> recorre las 8 fila
       data2 = data2 << 1;//desplazamiento bit a bit a la izquierda
       data2 |= pgm_read_byte_near(letterArray + (l * anchoLetra + t)); //agrega un nuevo valor al byte
     }
@@ -50,18 +58,18 @@ void sendDrawToWand(const boolean letterArray[], String colorDibujo) {
     //colorea segun el String asociado
     colorear(colorDibujo.charAt(t));
 
-    for (l = 0; l < altoLetra; l++) { //recorre las ocho filas
+    for (l = 0; l < altoLetra; l++) { //recorre las 8 filas
       data2 = data2 << 1;//desplazamiento bit a bit a la izquierda
       data2 |= pgm_read_byte_near(letterArray + (l * anchoLetra + t)); //agrega un nuevo valor al byte
     }
 
     //Setea los pines con cada columna del array
     PORTD = data2; //0-7
-    
+
     if (negativo == true) { //invierte lo dibus a negativo
       PORTD = PORTD ^ B11111111;
     }
-    
+
     delay(refreshrate);
     //Limpia el byte de data
     data2 = 0;
@@ -119,7 +127,7 @@ void colorear(char _color) {
 }
 
 void inicializarLEDs() {
-  //Inicialización de los LEDs, para comprobar que funciona todo bien
+  //Inicialización de los LEDs con el patron de inicio
   for (byte j = 0; j < altoLetra; j++) {
 
     for (byte i = 0; i < altoLetra; i++) {
@@ -161,7 +169,7 @@ void loop_povRGB() {
     if (colorPorLetra == false) {
       colorear(povtext_color); //colorea con un solo color
     } else {
-      colorear(povtext_colorporLetra.charAt(n));//colorea por caracter
+      colorear(povtext_colorporLetra.charAt(n));//colorea por letra
     }
 
     //busca el array de cada caracter y lo muestra en la varita
