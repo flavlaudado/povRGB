@@ -61,6 +61,9 @@ String povtext_colorporLetra = " MMCC YYY ";//W R G B C M Y
 //Para que no loopee, muestra el mensaje solo una vez
 boolean noLoop = false; //true o false
 
+//velocidad de ejecución, se puede cambiar !
+byte refreshrate = 1; //tiempo en milisegundos
+
 //----------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------
 // REEMPLAZAR AQUI CON LOS DIBUJOS !!
@@ -644,7 +647,7 @@ const boolean letter9[] PROGMEM = {
 //----------------------------------------------------------------------------------------------
 
 //byte con la data que prende y apaga los LEDs
-byte data2 = 0;//for portD
+byte data2 = 0;// portD
 
 //pines para los transistores RGB
 const byte pinR = 11;
@@ -656,9 +659,6 @@ byte n;
 byte m;
 byte t;
 byte l;
-
-//velocidad de ejecución, se puede cambiar !
-byte refreshrate = 1;
 
 int anchoLetra = 7;
 int altoLetra = 8;
