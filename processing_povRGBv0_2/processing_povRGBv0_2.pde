@@ -28,8 +28,8 @@ String nombre, nombreArchivo;
 char charNombre = 97;
 PImage plaquita;
 
-int columnas = 7; //ancho del lienzo
-int filas = 8; //correspondiente a 8 LEDs
+int columnas = 7; //división en horizontal
+int filas = 8; //división en vertical, correspondiente a 8 LEDs
 int anchoPixel, altoPixel;
 int nH, nV;
 color pixel;
@@ -40,7 +40,7 @@ boolean huboCambios;
 color colorRGB = color(255);
 PImage imgOut;
 int contadorColor = 0;
-int nColores = 8; //1-7
+int nColores = 8; // del 1-7
 color color1;
 int colorColumna[] = { 0, 0, 0, 0, 0, 0, 0};
 int colorColumnaAnterior[] = { 0, 0, 0, 0, 0, 0, 0};
@@ -53,7 +53,8 @@ boolean flash = false;
 boolean p = true;
 
 void setup() {
-  //fullScreen();
+  //tamaño del lienzo
+  //acomodar a la pantalla, conservar la proporción
   size(525, 600);
   //size(700, 800);
   background(0);
@@ -250,7 +251,7 @@ boolean huboCambios() {
 }
 
 void keyPressed() {
-  //ELEGIR EL COLOR
+  //ELEGIR EL COLOR de cada columna con las teclas del 1-7
   if (key=='1' & columnaActiva(0)) {//columna 1
     actualizarColorColumna(0);
   }
@@ -409,7 +410,7 @@ boolean columnaActiva(int _i) {
   }
 }
 
-void flash() {
+void flash() {//cuando guarda hace un flash blanco
   fill(255);
   rect(0, 0, width, height);
   if (frameCount >= tiempoRef + intervalo) {
@@ -419,7 +420,7 @@ void flash() {
   }
 }
 
-void nDibujos() {
+void nDibujos() {//mostrar nombre del dibu
   if (p == true) {
     textSize(10);
     fill(127);
