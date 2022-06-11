@@ -1,5 +1,5 @@
 # povRGB
-Projecto para realizar POV (persistencia de la visión) con 8 LEDs RGB
+Proyecto para realizar POV (persistencia de la visión) con 8 LEDs RGB
 El objetivo de este taller es construir un dispositivo POV y explorar sus posibilidades técnicas y creativas. Se abordarán nociones de electrónica, programación y persistencia de la visión, utilizando entornos de software y hardware libre.
 
 El dispositivo está basado en el fenómeno de la persistencia de la visión (POV).
